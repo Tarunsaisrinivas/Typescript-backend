@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import {config} from "dotenv";
 import connectDB from "./utils/db";
-
+import bookRoute from "./routes/bookRoute";
 config();
 
 const app: Express = express();
@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000;
 app.get("/", (req:Request, res:Response) => {
   res.send("Server is running smoothly 🚀");
 });
+app.use("/api/books", bookRoute);
 
 app.listen(port, () => {
   connectDB();
