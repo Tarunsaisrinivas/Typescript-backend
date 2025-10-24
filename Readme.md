@@ -30,7 +30,7 @@ npx tsc --init
 ```bash
 "start": "nodemon --exec ts-node index.ts"
 ```
-### **Step 5:**Add build and dev scripts
+### **Step 5:** Add build and dev scripts
 - Update your package.json scripts section as follows:
 ```bash
 "scripts": {
@@ -40,7 +40,7 @@ npx tsc --init
 }
 ```
 
-### **Step 6:**Install essential backend dependencies
+### **Step 6:** Install essential backend dependencies
 ```bash
 npm install express dotenv cors mongoose
 ```
