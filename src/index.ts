@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import {config} from "dotenv";
+import connectDB from "./utils/db";
 
 config();
 
@@ -11,5 +12,6 @@ app.get("/", (req:Request, res:Response) => {
 });
 
 app.listen(port, () => {
+  connectDB();
   console.log(`✅ Server is running at http://localhost:${port}`);
 });
