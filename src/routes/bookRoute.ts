@@ -1,9 +1,8 @@
 import { Router } from "express";
+import { getBooks } from "../controllers/bookController";
 
 const router = Router();
 
-router.get("/get-books", (req, res) => {
-  return res.json({ sucess: false, message: "No books found"});
-});
+router.get("/get-books", getBooks);
 
 export default router;
