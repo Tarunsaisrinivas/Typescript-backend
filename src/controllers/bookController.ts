@@ -13,7 +13,7 @@ export const addBook = async (req: Request, res: Response) => {
   const { name, author, publishedYear, description } = req.body;
 
   try {
-    const book = Book.create({
+    const book = await Book.create({
       name,
       author,
       publishedYear,
