@@ -5,8 +5,27 @@ interface IResponse {
   message: string;
   data?: any;
 }
-export const getBooks = (req: Request, res: Response) => {
-  res.json({ success: false, message: "Books found" } as IResponse);
+export const getBooks = async (req: Request, res: Response) => {
+  try {
+    const books = await Book.find({});
+    if (!books) {
+      return res.status(404).json({
+        success: false,
+        message: "No books found",
+      } as IResponse);
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Books fetched successfully",
+      data: books,
+    } as IResponse);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      errorMessage: error.message,
+    } as IResponse);
+  }
 };
 
 export const addBook = async (req: Request, res: Response) => {
