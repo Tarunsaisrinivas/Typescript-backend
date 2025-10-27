@@ -51,3 +51,28 @@ export const addBook = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateBook = async(req:Request,res:Response) =>{
+  const { id } = req.params;
+  const { name, author, publishedYear, description } = req.body;
+  try {
+    const book = await Book.findByIdAndUpdate(id, { name, author, publishedYear, description},{new:true});
+    if (!book) return res.status(404).json({
+      success: false,
+      message: "Book not found",
+    } as IResponse);
+
+    return res.status(200).json({
+      success: true,
+      message: "Book updated successfully",
+      data: book,
+    } as IResponse);
+  }
+  catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+      errorMessage: error.message,
+    } as IResponse);
+  }
+}
