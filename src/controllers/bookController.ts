@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Book from "../models/book";
-interface IResponse {
+export interface IResponse {
   success: boolean;
   message: string;
   data?: any;
