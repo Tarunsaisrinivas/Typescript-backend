@@ -47,3 +47,25 @@ export const signup = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const login = async (req: Request, res: Response) => {
+  const {username, email, password } = req.body;
+  try {
+    if ((!username && !email )|| !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Username,Email and password are required",
+        data: null,
+      } as IResponse);
+    }
+    
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      errorMessage: error.message,
+      data: null,
+    } as IResponse);
+    console.log(error);
+  }
+};
