@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import e, { Request, Response } from "express";
 import { IResponse } from "./bookController";
 import { IUser, User } from "../models/user";
-
+import * as jwt from "jsonwebtoken";
 export const signup = async (req: Request, res: Response) => {
   const { name, email, phone, username, password, role } = req.body;
   try {
@@ -60,7 +60,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     let user: IUser | null;
-    user = await User.findOne({email:email});
+    user = await User.findOne({ email: email });
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -76,7 +76,15 @@ export const login = async (req: Request, res: Response) => {
         data: null,
       } as IResponse);
     }
-    return res.status(200).json({
+
+    const payload = {
+      id: user._id,
+      role: user.role,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET as jwt.Secret, {
+      expiresIn: "1h",
+    });
+    return res.cookie("token", token).json({
       success: true,
       message: "Login successful",
       data: user,
