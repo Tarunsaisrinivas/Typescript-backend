@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { IResponse } from "./bookController";
 import { IUser, User } from "../models/user";
 
@@ -49,16 +49,38 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const {username, email, password } = req.body;
+  const { email, password } = req.body;
   try {
-    if ((!username && !email )|| !password) {
+    if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Username,Email and password are required",
+        message: "Email and password are required",
         data: null,
       } as IResponse);
     }
-    
+
+    let user: IUser | null;
+    user = await User.findOne({email:email});
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+        data: null,
+      } as IResponse);
+    }
+    let comparePassword = await bcrypt.compare(password, user.password);
+    if (!comparePassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+        data: null,
+      } as IResponse);
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: user,
+    } as IResponse);
   } catch (error: any) {
     res.status(500).json({
       success: false,
