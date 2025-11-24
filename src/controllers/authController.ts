@@ -99,3 +99,11 @@ export const login = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const logout = async(req:Request,res:Response) =>{
+  try {
+    return res.status(200).cookie("token","").json({success:true,message:"Logout successful",data:null} as IResponse);
+  } catch (error: any) {
+    return res.status(500).json({success:false,message:"Error performing logout",data:null} as IResponse);
+  }
+};
