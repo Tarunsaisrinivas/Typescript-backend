@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import Book from "../models/book";
+import { ROLES } from "../utils/role";
 export interface IResponse {
   success: boolean;
   message: string;
   data?: any;
 }
 export const getBooks = async (req: Request, res: Response) => {
+  // return res.status(200).json({success:true,message:"Books fetched successfully",data:{id:req.id,role:req.role}} as IResponse);
   try {
     const books = await Book.find({});
     if (!books) {
@@ -29,6 +31,12 @@ export const getBooks = async (req: Request, res: Response) => {
 };
 
 export const addBook = async (req: Request, res: Response) => {
+  if(![ROLES.creator,ROLES.admin].includes(req.role as string)){
+    return res.status(401).json({
+      success: false,
+      message: "Your not allowed to access this resorce",
+    } as IResponse);
+  }
   const { name, author, publishedYear, description } = req.body;
 
   try {
@@ -53,6 +61,12 @@ export const addBook = async (req: Request, res: Response) => {
 };
 
 export const updateBook = async(req:Request,res:Response) =>{
+    if (![ROLES.creator, ROLES.admin].includes(req.role as string)) {
+      return res.status(401).json({
+        success: false,
+        message: "Your not allowed to access this resorce",
+      } as IResponse);
+    }
   const { id } = req.params;
   const { name, author, publishedYear, description } = req.body;
   try {
@@ -78,6 +92,12 @@ export const updateBook = async(req:Request,res:Response) =>{
 }
 
 export const deleteBook = async(req:Request,res:Response) =>{
+    if (![ROLES.creator, ROLES.admin].includes(req.role as string)) {
+      return res.status(401).json({
+        success: false,
+        message: "Your not allowed to access this resorce",
+      } as IResponse);
+    }
   const { id } = req.params;
   try {
     const book = await Book.findByIdAndDelete(id);
