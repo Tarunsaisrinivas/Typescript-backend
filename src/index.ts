@@ -4,6 +4,7 @@ import connectDB from "./utils/db";
 import bookRoute from "./routes/bookRoute";
 import helmet from "helmet";
 import authRouter from "./routes/authRoute";
+import { swaggerDocs } from "./swagger";
 config();
 
 const app: Express = express();
@@ -15,7 +16,9 @@ app.get("/", (req:Request, res:Response) => {
 });
 app.use("/api/books", bookRoute);
 app.use("/api/auth", authRouter);
+swaggerDocs(app);
 app.listen(port, () => {
   connectDB();
   console.log(`✅ Server is running at http://localhost:${port}`);
+  console.log(`✅ Swagger documentation is running at http://localhost:${port}/api-docs`);
 });
