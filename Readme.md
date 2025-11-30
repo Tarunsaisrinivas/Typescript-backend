@@ -36,7 +36,7 @@ src/
  └── index.ts
 
 dist/ (compiled JS)
-api/  (for Vercel deployment)
+
 ```
 
 ## 📘 API Documentation (Swagger UI)
@@ -50,8 +50,8 @@ Swagger UI provides an interactive interface for exploring and testing the API.
 ### Clone the repository
 
 ```
-git clone https://github.com/your-username/book-store-backend.git
-cd book-store-backend
+git clone https://github.com/Tarunsaisrinivas/Typescript-backend
+cd Typescript-backend
 ```
 
 ### Install dependencies
@@ -63,7 +63,7 @@ npm install
 ### Create environment file
 
 ```
-PORT=5000
+PORT=3000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 ```
@@ -114,24 +114,6 @@ Authorization: Bearer <your_token_here>
 | POST   | /api/books/add-book        | Yes       | Add a book    |
 | PUT    | /api/books/update-book/:id | Yes       | Update book   |
 | DELETE | /api/books/delete-book/:id | Yes       | Delete book   |
-
-## ☁️ Deployment on Vercel
-
-Ensure your compiled file exists in:
-
-```
-api/index.js
-```
-
-### vercel.json
-
-```
-{
-  "version": 2,
-  "builds": [{ "src": "api/index.js", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "/api/index.js" }]
-}
-```
 
 ## 🤝 Contributing
 
