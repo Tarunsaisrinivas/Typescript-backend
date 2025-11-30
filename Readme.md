@@ -1,183 +1,146 @@
-# 🚀 Node.js + TypeScript Backend Setup Guide
+# 📚 Book Store Backend API
 
-This repository provides a step-by-step setup for building a **backend using Node.js and TypeScript**.  
-Follow the instructions below to configure, compile, and run your project with ease.
+A secure and scalable **Book Store Backend API** built using **Node.js, Express, TypeScript, MongoDB, and JWT authentication**, with full API documentation via **Swagger UI**.
 
----
+## 🚀 Features
 
-## 🧰 Prerequisites
+- ⚡ TypeScript for enhanced type safety
+- 🔐 JWT Authentication for secure access
+- 📚 CRUD operations for managing books
+- 🧱 Clean REST API architecture (routes, controllers, models, middleware)
+- 🛡️ Helmet for security
+- 🗂️ MongoDB with Mongoose
+- 📘 Swagger UI for interactive API testing
+- ☁️ Deployable on Vercel (Serverless functions)
 
-Make sure you have the following installed on your system:
+## 🛠️ Tech Stack
 
-- [Node.js](https://nodejs.org/) (v16 or later)
-- npm (comes with Node.js)
+- Node.js
+- Express.js
+- TypeScript
+- MongoDB + Mongoose
+- JWT Authentication
+- Helmet
+- Swagger UI
 
----
-## Status Codes 
-
-| **Code** | **Category**      | **Meaning**                   | **Description**                                      |
-| -------- | ----------------- | ----------------------------- | ---------------------------------------------------- |
-| **100**  | 1xx Informational | Continue                      | Request headers received; client should send body.   |
-| **101**  | 1xx Informational | Switching Protocols           | Server agrees to switch protocols (e.g., WebSocket). |
-| **102**  | 1xx Informational | Processing                    | Request received and being processed (WebDAV).       |
-| **103**  | 1xx Informational | Early Hints                   | Used to preload resources before final response.     |
-| **200**  | 2xx Success       | OK                            | Request succeeded (common success code).             |
-| **201**  | 2xx Success       | Created                       | Resource created successfully (POST).                |
-| **202**  | 2xx Success       | Accepted                      | Request accepted for processing, not completed yet.  |
-| **203**  | 2xx Success       | Non-Authoritative Information | Response from a third-party source.                  |
-| **204**  | 2xx Success       | No Content                    | Success but no response body (DELETE).               |
-| **205**  | 2xx Success       | Reset Content                 | Tells client to reset the document view.             |
-| **206**  | 2xx Success       | Partial Content               | Partial data due to range request (file downloads).  |
-| **207**  | 2xx Success       | Multi-Status                  | Multiple status results (WebDAV).                    |
-| **300**  | 3xx Redirection   | Multiple Choices              | Several options available for the resource.          |
-| **301**  | 3xx Redirection   | Moved Permanently             | Resource permanently moved to a new URL.             |
-| **302**  | 3xx Redirection   | Found                         | Temporarily moved to a new URL.                      |
-| **303**  | 3xx Redirection   | See Other                     | Redirect to another resource (e.g., after POST).     |
-| **304**  | 3xx Redirection   | Not Modified                  | Resource not changed since last request (cache).     |
-| **307**  | 3xx Redirection   | Temporary Redirect            | Temporary redirect; method not changed.              |
-| **308**  | 3xx Redirection   | Permanent Redirect            | Permanent redirect; method not changed.              |
-| **400**  | 4xx Client Error  | Bad Request                   | Invalid syntax or missing parameters.                |
-| **401**  | 4xx Client Error  | Unauthorized                  | Authentication required or invalid credentials.      |
-| **402**  | 4xx Client Error  | Payment Required              | Reserved for future use.                             |
-| **403**  | 4xx Client Error  | Forbidden                     | Authenticated but not authorized.                    |
-| **404**  | 4xx Client Error  | Not Found                     | Resource doesn’t exist.                              |
-| **405**  | 4xx Client Error  | Method Not Allowed            | HTTP method not supported.                           |
-| **406**  | 4xx Client Error  | Not Acceptable                | Response format not supported.                       |
-| **407**  | 4xx Client Error  | Proxy Authentication Required | Need authentication via proxy.                       |
-| **408**  | 4xx Client Error  | Request Timeout               | Client took too long to send request.                |
-| **409**  | 4xx Client Error  | Conflict                      | Request conflicts with current resource state.       |
-| **410**  | 4xx Client Error  | Gone                          | Resource permanently removed.                        |
-| **411**  | 4xx Client Error  | Length Required               | Missing `Content-Length` header.                     |
-| **412**  | 4xx Client Error  | Precondition Failed           | Preconditions in headers not met.                    |
-| **413**  | 4xx Client Error  | Payload Too Large             | Request body too large.                              |
-| **414**  | 4xx Client Error  | URI Too Long                  | URL too long for server to handle.                   |
-| **415**  | 4xx Client Error  | Unsupported Media Type        | Request format not supported.                        |
-| **416**  | 4xx Client Error  | Range Not Satisfiable         | Requested range invalid.                             |
-| **417**  | 4xx Client Error  | Expectation Failed            | `Expect` header conditions failed.                   |
-| **418**  | 4xx Client Error  | I’m a Teapot                  | Joke code from RFC 2324 ☕.                          |
-| **422**  | 4xx Client Error  | Unprocessable Entity          | Well-formed request but semantic error (validation). |
-| **429**  | 4xx Client Error  | Too Many Requests             | Rate limit exceeded.                                 |
-| **500**  | 5xx Server Error  | Internal Server Error         | Generic server failure.                              |
-| **501**  | 5xx Server Error  | Not Implemented               | Server doesn’t support the method.                   |
-| **502**  | 5xx Server Error  | Bad Gateway                   | Invalid response from upstream server.               |
-| **503**  | 5xx Server Error  | Service Unavailable           | Server down or overloaded.                           |
-| **504**  | 5xx Server Error  | Gateway Timeout               | Upstream server didn’t respond in time.              |
-| **505**  | 5xx Server Error  | HTTP Version Not Supported    | Unsupported HTTP version.                            |
-| **507**  | 5xx Server Error  | Insufficient Storage          | Server out of storage.                               |
-| **508**  | 5xx Server Error  | Loop Detected                 | Infinite loop detected in processing.                |
-
----
-
-## ⚙️ Setup Steps
-
-### **Step 1:** Initialize a new Node.js project
-
-```bash
-npm init -y
-```
-
-### **Step 2:** Install TypeScript and type definitions
-
-```bash
-npm install -D typescript @types/node @types/express
-```
-
-### **Step 3:** Initialize TypeScript configuration
-
-```bash
-npx tsc --init
-```
-
-### **Step 4:**(Optional) Run TypeScript directly without compiling
-
-```bash
-"start": "nodemon --exec ts-node index.ts"
-```
-
-### **Step 5:** Add build and dev scripts
-
-- Update your package.json scripts section as follows:
-
-```bash
-"scripts": {
-  "build": "tsc",
-  "start": "node dist/index.js",
-  "dev": "nodemon src/index.ts"
-}
-```
-
-### **Step 6:** Install essential backend dependencies
-
-```bash
-npm install express dotenv cors mongoose
-```
-
-### **Step 7:** Fix common TypeScript configuration issues
-
-- If any errors occur while running the code, update your tsconfig.json as below:
-
-```bash
-{
-  "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules"]
-}
+## 📁 Project Structure
 
 ```
-
-### **Step 8:** Create the project structure
-
-- Inside your root folder, create a src folder and an index.ts file.
-
-```bash
 src/
+ ├── controllers/
+ ├── routes/
+ ├── models/
+ ├── middleware/
+ ├── utils/
+ ├── swagger.ts
  └── index.ts
+
+dist/ (compiled JS)
+api/  (for Vercel deployment)
 ```
 
-### **Step 9:** Write your first Express server
+## 📘 API Documentation (Swagger UI)
 
-- Add the following code to src/index.ts:
+Swagger UI provides an interactive interface for exploring and testing the API.
 
-```ts
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
+![Api Documentation ScreenShot](./screenshot.png)
 
-dotenv.config();
-const app = express();
+## 🔧 Installation & Setup
 
-app.use(cors());
-app.use(express.json());
+### Clone the repository
 
-const PORT = process.env.PORT || 5000;
-
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
-
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+```
+git clone https://github.com/your-username/book-store-backend.git
+cd book-store-backend
 ```
 
-### **Step 10:** Run in development mode
+### Install dependencies
 
-```bash
+```
+npm install
+```
+
+### Create environment file
+
+```
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+```
+
+### Start development server
+
+```
 npm run dev
 ```
 
-### **Step 11:** Compile TypeScript code
+### Build the project
 
-```bash
+```
 npm run build
 ```
 
-### **Step 12:** Run compiled JavaScript code
+### Start production server
 
-```bash
+```
 npm start
 ```
+
+## 🔐 Authentication
+
+This project uses JWT tokens.
+
+Header example:
+
+```
+Authorization: Bearer <your_token_here>
+```
+
+## 📚 API Endpoints
+
+### Auth Routes
+
+| Method | Endpoint         | Description           |
+| ------ | ---------------- | --------------------- |
+| POST   | /api/auth/signup | Create new user       |
+| POST   | /api/auth/login  | Login & receive token |
+| GET    | /api/auth/logout | Logout user           |
+
+### Book Routes
+
+| Method | Endpoint                   | Protected | Description   |
+| ------ | -------------------------- | --------- | ------------- |
+| GET    | /api/books/get-books       | No        | Get all books |
+| POST   | /api/books/add-book        | Yes       | Add a book    |
+| PUT    | /api/books/update-book/:id | Yes       | Update book   |
+| DELETE | /api/books/delete-book/:id | Yes       | Delete book   |
+
+## ☁️ Deployment on Vercel
+
+Ensure your compiled file exists in:
+
+```
+api/index.js
+```
+
+### vercel.json
+
+```
+{
+  "version": 2,
+  "builds": [{ "src": "api/index.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/api/index.js" }]
+}
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Open an issue or submit a pull request.
+
+## 📄 License
+
+Licensed under the MIT License.
+
+## ⭐ Support
+
+If you found this project useful, please ⭐ star the repository!
